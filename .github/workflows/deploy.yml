@@ -1,0 +1,53 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - master # Trigger on pushes to main or master
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java (required for Flutter toolchain setup)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          # You can specify a version if needed, or leave it to fetch the latest stable
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Extract Repository Name
+        run: |
+          # Extract repository name from 'owner/repo' format (e.g., 'username/my-quiz' -> 'my-quiz')
+          REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
+          echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
+          echo "Extracted repository name is: $REPO_NAME"
+
+      - name: Build Flutter Web
+        run: |
+          # Build Flutter Web with base-href matching the GitHub Pages repository subpath
+          flutter build web --base-href "/$REPO_NAME/"
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build/web # Folder where the build output is generated
+          branch: gh-pages # Branch to deploy to
+          clean: true # Automatically remove obsolete files

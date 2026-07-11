@@ -390,68 +390,56 @@ class _MainLayoutState extends State<MainLayout> {
         // Level Cards Grid/List (Responsive layout)
         LayoutBuilder(
           builder: (context, constraints) {
-            final isMobile = constraints.maxWidth < 600;
-            return isMobile
-                ? Column(
-                    children: [
-                      _buildLevelCard(
-                        title: 'Beginner Level',
-                        desc: 'Target core building blocks: StatelessWidget vs StatefulWidget, basic routing, package managers, and widget layout structures.',
-                        icon: Icons.school_outlined,
-                        color: const Color(0xFF06B6D4),
-                        level: 'Beginner',
-                      ),
-                      const SizedBox(height: 16),
-                      _buildLevelCard(
-                        title: 'Intermediate Level',
-                        desc: 'Cover lifecycle hooks, InheritedWidgets, state management flow, async processing (Futures/Streams), and layout keys.',
-                        icon: Icons.workspace_premium_outlined,
-                        color: const Color(0xFF6366F1),
-                        level: 'Intermediate',
-                      ),
-                      const SizedBox(height: 16),
-                      _buildLevelCard(
-                        title: 'Advanced Level',
-                        desc: 'Dive into rendering engines (RenderObject trees), custom painting, memory leak debugging, isolates, and FFI bridges.',
-                        icon: Icons.psychology_outlined,
-                        color: const Color(0xFFEC4899),
-                        level: 'Advanced',
-                      ),
-                    ],
-                  )
-                : Row(
-                    children: [
-                      Expanded(
-                        child: _buildLevelCard(
-                          title: 'Beginner',
-                          desc: 'Basic widgets, setState, layout properties, and standard pubspec setups.',
-                          icon: Icons.school_outlined,
-                          color: const Color(0xFF06B6D4),
-                          level: 'Beginner',
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _buildLevelCard(
-                          title: 'Intermediate',
-                          desc: 'State propagation, async Streams, didUpdateWidget, Keys, and custom painters.',
-                          icon: Icons.workspace_premium_outlined,
-                          color: const Color(0xFF6366F1),
-                          level: 'Intermediate',
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _buildLevelCard(
-                          title: 'Advanced',
-                          desc: 'RenderObjects, repaint boundaries, Isolates, MethodChannels, and garbage disposal.',
-                          icon: Icons.psychology_outlined,
-                          color: const Color(0xFFEC4899),
-                          level: 'Advanced',
-                        ),
-                      ),
-                    ],
-                  );
+            final isMobile = constraints.maxWidth < 650;
+            final cardWidth = isMobile
+                ? constraints.maxWidth
+                : (constraints.maxWidth - 16) / 2;
+            return Wrap(
+              spacing: 16,
+              runSpacing: 16,
+              children: [
+                SizedBox(
+                  width: cardWidth,
+                  child: _buildLevelCard(
+                    title: 'Beginner Level',
+                    desc: 'Core UI blocks: StatelessWidget vs StatefulWidget, layout properties, and package configurations.',
+                    icon: Icons.school_outlined,
+                    color: const Color(0xFF06B6D4),
+                    level: 'Beginner',
+                  ),
+                ),
+                SizedBox(
+                  width: cardWidth,
+                  child: _buildLevelCard(
+                    title: 'Intermediate Level',
+                    desc: 'Lifecycle states, InheritedWidget data flow, async Streams/Futures, Keys, and custom painters.',
+                    icon: Icons.workspace_premium_outlined,
+                    color: const Color(0xFF6366F1),
+                    level: 'Intermediate',
+                  ),
+                ),
+                SizedBox(
+                  width: cardWidth,
+                  child: _buildLevelCard(
+                    title: 'Advanced Level',
+                    desc: 'RenderObjects, repaint boundaries, Isolates, MethodChannels, and memory leaks profiling.',
+                    icon: Icons.psychology_outlined,
+                    color: const Color(0xFFEC4899),
+                    level: 'Advanced',
+                  ),
+                ),
+                SizedBox(
+                  width: cardWidth,
+                  child: _buildLevelCard(
+                    title: 'Dart & DSA',
+                    desc: 'Pure logic: Two Sum, reversing lists, balanced brackets, memoized recursion, and Kadane\'s (No UI widgets).',
+                    icon: Icons.code_rounded,
+                    color: const Color(0xFF10B981),
+                    level: 'Dart & DSA',
+                  ),
+                ),
+              ],
+            );
           },
         ),
 
@@ -848,6 +836,8 @@ class _MainLayoutState extends State<MainLayout> {
         return const Color(0xFF6366F1);
       case 'Advanced':
         return const Color(0xFFEC4899);
+      case 'Dart & DSA':
+        return const Color(0xFF10B981);
       default:
         return const Color(0xFF6366F1);
     }
@@ -1326,7 +1316,7 @@ class _MainLayoutState extends State<MainLayout> {
                     child: Wrap(
                       spacing: 8,
                       runSpacing: 8,
-                      children: ['All', 'Beginner', 'Intermediate', 'Advanced'].map((lvl) {
+                      children: ['All', 'Beginner', 'Intermediate', 'Advanced', 'Dart & DSA'].map((lvl) {
                         final isSelected = _browseFilter == lvl;
                         return ChoiceChip(
                           label: Text(lvl),
@@ -1523,6 +1513,7 @@ class _MainLayoutState extends State<MainLayout> {
     if (level == 'Beginner') return const Color(0xFF06B6D4);
     if (level == 'Intermediate') return const Color(0xFF6366F1);
     if (level == 'Advanced') return const Color(0xFFEC4899);
+    if (level == 'Dart & DSA') return const Color(0xFF10B981);
     return const Color(0xFF94A3B8);
   }
 

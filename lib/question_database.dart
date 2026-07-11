@@ -507,4 +507,225 @@ void dispose() {
   super.dispose();
 }''',
   ),
+
+  // ==================== DART & DSA ====================
+  Question(
+    id: 'dsa1',
+    category: 'Dart & DSA',
+    questionText: 'Given a list of integers and a target sum, which Dart function correctly implements the Two Sum problem using a Map in O(n) time complexity?',
+    options: [
+      'An O(n^2) nested loop approach with index checks.',
+      'A single-pass Map lookup storing complements and indices, yielding O(n) time and space.',
+      'A recursive permutation approach yielding O(n!) complexity.',
+      'An in-place quicksort followed by binary search yielding O(n log n) complexity.'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'This is the standard Two Sum algorithm using a hash map (Dart\'s Map). By storing the complement of each number (target - current_number) along with its index, we can find the matching pair in a single pass. Map lookups in Dart average O(1) time, yielding O(n) total time complexity.',
+    codeSnippet: '''List<int> twoSum(List<int> nums, int target) {
+  final Map<int, int> complementMap = {};
+  for (int i = 0; i < nums.length; i++) {
+    int complement = target - nums[i];
+    if (complementMap.containsKey(complement)) {
+      return [complementMap[complement]!, i];
+    }
+    complementMap[nums[i]] = i;
+  }
+  return [];
+}''',
+  ),
+  Question(
+    id: 'dsa2',
+    category: 'Dart & DSA',
+    questionText: 'Which Dart code correctly reverses a singly linked list iteratively in O(n) time?',
+    options: [
+      'By recursively building a copy of the list nodes.',
+      'By swapping node values while traversing both ends.',
+      'By shifting pointers using prev, current, and nextTemp trackers iteratively.',
+      'By loading nodes into a dynamic List and reversing the list index order.'
+    ],
+    correctOptionIndex: 2,
+    explanation: 'The iterative approach uses three pointers: prev, current, and nextTemp. In each iteration, it saves the next node, redirects current.next to point to the prev node, and moves prev and current one step forward. It completes in O(n) time and O(1) space.',
+    codeSnippet: '''class Node {
+  int value;
+  Node? next;
+  Node(this.value);
+}
+
+Node? reverseList(Node? head) {
+  Node? prev = null;
+  Node? current = head;
+  while (current != null) {
+    Node? nextTemp = current.next;
+    current.next = prev;
+    prev = current;
+    current = nextTemp;
+  }
+  return prev;
+}''',
+  ),
+  Question(
+    id: 'dsa3',
+    category: 'Dart & DSA',
+    questionText: 'What is the correct way to compute the midpoint in Binary Search to prevent integer overflow in large lists?',
+    options: [
+      'int mid = (low + high) ~/ 2;',
+      'int mid = low + (high - low) ~/ 2;',
+      'int mid = (low + high) >> 1;',
+      'int mid = low + (high + low) ~/ 2;'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'In many environments, (low + high) can exceed the maximum integer boundary if both indices are very large, leading to overflow. Writing it as low + (high - low) ~/ 2 achieves the same calculation safely. (Dart integers grow to 64-bit on VMs, but compiling to JS limits integer operations to JS safe ranges, making this a best practice).',
+  ),
+  Question(
+    id: 'dsa4',
+    category: 'Dart & DSA',
+    questionText: 'Which Dart code correctly uses a List as a Stack to check if bracket characters (, [, { are balanced?',
+    options: [
+      'Using a List iterator to find symmetric matches from the center.',
+      'Using a recursive regex replacement on string pairs.',
+      'Using a List as a stack to push opening brackets and pop/compare for closing brackets in O(n) time.',
+      'Using a double-ended queue to check bracket elements from both ends.'
+    ],
+    correctOptionIndex: 2,
+    explanation: 'Dart\'s List has add() to push and removeLast() to pop, making it a perfect stack. The logic pushes opening brackets onto the stack and pops them to match closing brackets. If brackets mismatch or the stack is not empty at the end, it returns false.',
+    codeSnippet: '''bool isValid(String s) {
+  final List<String> stack = [];
+  final Map<String, String> pairs = {')': '(', ']': '[', '}': '{'};
+  for (int i = 0; i < s.length; i++) {
+    String char = s[i];
+    if (pairs.containsValue(char)) {
+      stack.add(char);
+    } else if (pairs.containsKey(char)) {
+      if (stack.isEmpty || stack.removeLast() != pairs[char]) {
+        return false;
+      }
+    }
+  }
+  return stack.isEmpty;
+}''',
+  ),
+  Question(
+    id: 'dsa5',
+    category: 'Dart & DSA',
+    questionText: 'What is the time complexity of the following memoized Fibonacci function in Dart?',
+    options: [
+      'O(2^n)',
+      'O(n^2)',
+      'O(n)',
+      'O(log n)'
+    ],
+    correctOptionIndex: 2,
+    explanation: 'Standard recursion for Fibonacci takes O(2^n) time due to duplicate subproblem calculations. Memoization caches the results of previously calculated Fibonacci numbers, ensuring each number from 0 to N is computed exactly once, reducing time complexity to O(n).',
+    codeSnippet: '''int fib(int n, Map<int, int> memo) {
+  if (memo.containsKey(n)) return memo[n]!;
+  if (n <= 1) return n;
+  memo[n] = fib(n - 1, memo) + fib(n - 2, memo);
+  return memo[n]!;
+}''',
+  ),
+  Question(
+    id: 'dsa6',
+    category: 'Dart & DSA',
+    questionText: 'Which Dart function reverses a string without using built-in methods like .split(), .reversed, or .join()?',
+    options: [
+      'Using a standard loop with string concatenation (+).',
+      'Using a StringBuffer to accumulate characters in reverse order in O(n) time.',
+      'Using double recursion swapping characters.',
+      'Using character byte array parsing.'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'Strings in Dart are immutable. Concatenating strings using + in a loop creates new string objects repeatedly, leading to O(n^2) complexity. Using StringBuffer accumulates characters and constructs the string once, resulting in efficient O(n) time.',
+    codeSnippet: '''String reverse(String input) {
+  final buffer = StringBuffer();
+  for (int i = input.length - 1; i >= 0; i--) {
+    buffer.write(input[i]);
+  }
+  return buffer.toString();
+}''',
+  ),
+  Question(
+    id: 'dsa7',
+    category: 'Dart & DSA',
+    questionText: 'In a list of size N containing integers from 1 to N-1 (guaranteeing a duplicate), how does the Tortoise and Hare algorithm find the duplicate in O(1) space?',
+    options: [
+      'By performing a dual binary search on index ranges.',
+      'By treating indices as pointers to detect the cycle intersection and entry point in O(n) time and O(1) space.',
+      'By sorting the list in-place and checking adjacent values.',
+      'By computing the mathematical sum difference.'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'Since elements range from 1 to N-1, we can treat the list values as pointers to indices. A duplicate value means multiple indices point to the same index, forming a cycle. Floyd\'s Cycle Detection algorithm finds the intersection and then the entry point of the cycle, which is the duplicate number, in O(n) time and O(1) space.',
+    codeSnippet: '''int findDuplicate(List<int> nums) {
+  int tortoise = nums[0];
+  int hare = nums[0];
+  do {
+    tortoise = nums[tortoise];
+    hare = nums[nums[hare]];
+  } while (tortoise != hare);
+  
+  tortoise = nums[0];
+  while (tortoise != hare) {
+    tortoise = nums[tortoise];
+    hare = nums[hare];
+  }
+  return tortoise;
+}''',
+  ),
+  Question(
+    id: 'dsa8',
+    category: 'Dart & DSA',
+    questionText: 'What is the space complexity of an in-place Quick Sort algorithm in Dart compared to Bubble Sort?',
+    options: [
+      'Quick Sort is O(1) and Bubble Sort is O(n).',
+      'Quick Sort is O(log n) due to recursive call stack frames, while Bubble Sort is O(1).',
+      'Both are O(1) because they sort in-place.',
+      'Quick Sort is O(n) and Bubble Sort is O(1).'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'Although both algorithms sort elements "in-place" without auxiliary lists, Quick Sort uses recursive function calls. The recursion stack requires memory, taking O(log n) space on average. Bubble Sort is iterative and uses strictly O(1) auxiliary space.',
+  ),
+  Question(
+    id: 'dsa9',
+    category: 'Dart & DSA',
+    questionText: 'Which Dart function checks if an integer is a palindrome without converting it to a string?',
+    options: [
+      'By using mathematical modular arithmetic to check only the first and last digits.',
+      'By comparing absolute division quotients iteratively.',
+      'By reversing the second half of the integer using modulo and division, then comparing it in O(log10(n)) time.',
+      'By recursively building a reversed list of integer digits.'
+    ],
+    correctOptionIndex: 2,
+    explanation: 'By reversing only the second half of the number (till the original number x is less than or equal to revertedNumber), we avoid integer overflow and avoid string conversion. For odd digits, we compare x == revertedNumber ~/ 10 to ignore the middle digit.',
+    codeSnippet: '''bool isPalindrome(int x) {
+  if (x < 0 || (x % 10 == 0 && x != 0)) return false;
+  int revertedNumber = 0;
+  while (x > revertedNumber) {
+    revertedNumber = revertedNumber * 10 + x % 10;
+    x = x ~/ 10;
+  }
+  return x == revertedNumber || x == revertedNumber ~/ 10;
+}''',
+  ),
+  Question(
+    id: 'dsa10',
+    category: 'Dart & DSA',
+    questionText: 'Which Dart code implements Kadane\'s Algorithm to find the maximum sum of a contiguous subarray in O(n) time?',
+    options: [
+      'By sorting prefix sum pairs in O(n log n) time.',
+      'By maintaining a running local max and a global max in a single pass in O(n) time and O(1) space.',
+      'By checking all possible subarray sums in O(n^2) nested loops.',
+      'By recursively checking prefix sums using memoized bounds.'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'Kadane\'s algorithm maintains the maximum subarray sum ending at the current position (currentMax) and the global maximum subarray sum (maxSoFar). It makes a single pass over the list, yielding O(n) time complexity and O(1) space complexity.',
+    codeSnippet: '''int maxSubArray(List<int> nums) {
+  int maxSoFar = nums[0];
+  int currentMax = nums[0];
+  for (int i = 1; i < nums.length; i++) {
+    currentMax = max(nums[i], currentMax + nums[i]);
+    maxSoFar = max(maxSoFar, currentMax);
+  }
+  return maxSoFar;
+}''',
+  ),
 ];
